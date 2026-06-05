@@ -461,50 +461,65 @@
 // ─────────────────────────────────────────────
 // DATA — Edit this section to update the board
 // ─────────────────────────────────────────────
+// ── HOW POINTS WORK ──────────────────────────────────────────────────────────
+// Each event has a raw "pts" value per player taken directly from the spreadsheet.
+// The overall total is the sum of pts across all events the player attended.
+// We store results as { name, pts } so the numbers always match the spreadsheet exactly.
+// ─────────────────────────────────────────────────────────────────────────────
+ 
 const EVENTS = [
   {
     id: 'bc1',
     name: "Brewer's Cup 1",
     date: "March 30, 2026",
-    // Points: index = finish position (1=1st, 2=2nd, etc.)
-    points: [0, 11.5, 11, 10.5, 10, 9, 2, 2, 2, 1, 1, 1, 1],
+    // finish → display label used in the event tab
     results: [
-      { name: "Dan Cruz",           finish: 1 },
-      { name: "Gab Chee Kee",       finish: 2 },
-      { name: "Jose Manuel Almiro", finish: 3 },
-      { name: "John Var",           finish: 4 },
-      { name: "Alex Carrera",       finish: 5 },
-      { name: "Finn Ashcroft",      finish: 6 },
-      { name: "Lyra Stormcrest",    finish: 7 },
-      { name: "Tobias Vex",         finish: 8 },
-      { name: "Cael Ironwood",      finish: 9 },
-      { name: "Nyx Pale",           finish: 10 },
-      { name: "Sable Marrow",       finish: 11 },
-      { name: "Ren Duskfall",       finish: 12 },
+      { name: "Dan Cruz",            pts: 11.5, finish: 1  },
+      { name: "Gab Chee Kee",        pts: 11,   finish: 2  },
+      { name: "Jose Manuel Almiro",  pts: 10.5, finish: 3  },
+      { name: "John Var",            pts: 10,   finish: 4  },
+      { name: "Alex Carrera",        pts: 9,    finish: 5  },
+      { name: "Jeremy Labata",       pts: 6.5,  finish: 6  },
+      { name: "Gabby Romero",        pts: 4,    finish: 7  },
+      { name: "Martin Miranda",      pts: 4,    finish: 7  },
+      { name: "Gerrard Romero",      pts: 3,    finish: 9  },
+      { name: "Jan Paolo Pineda",    pts: 4.5,  finish: 9  },
+      { name: "Bemas Cabida",        pts: 4.5,  finish: 9  },
+      { name: "Fryman Cal",          pts: 5,    finish: 9  },
+      { name: "Roland Devesa",       pts: 5,    finish: 9  },
+      { name: "John Ezekiel",        pts: 3,    finish: 9  },
+      { name: "Ian Melendres",       pts: 4,    finish: 9  },
+      { name: "Diego Cerrudo",       pts: 1,    finish: 9  },
+      { name: "Mykee Myk",           pts: 1,    finish: 9  },
+      { name: "Karl Buensalida",     pts: 1,    finish: 9  },
+      { name: "Patrick Padilla",     pts: 1,    finish: 9  },
+      { name: "Frederick Raj Umel",  pts: 1,    finish: 9  },
     ]
   },
   {
     id: 'bc2',
     name: "Brewer's Cup 2",
     date: "May 30, 2026",
-    // Points: index = finish position (1=1st, 2=2nd, etc.)
-    points: [0, 12.5, 11, 11, 10, 7, 6.5, 6, 6, 5, 5, 5, 4, 3, 2, 2],
     results: [
-      { name: "John Var",       finish: 1 },
-      { name: "Ron Romero",     finish: 2 },
-      { name: "Milmar Taylor",  finish: 3 },
-      { name: "John Ezekiel",   finish: 4 },
-      { name: "Alex Carrera",   finish: 5 },
-      { name: "Ian Melendres",  finish: 6 },
-      { name: "Ian Tan",        finish: 7 },
-      { name: "Mykee Myk",      finish: 8 },
-      { name: "Ismael",         finish: 9 },
-      { name: "Juan Gonzaga",   finish: 9 },
-      { name: "Martin Miranda", finish: 9 },
-      { name: "Diego",          finish: 10 },
-      { name: "Cesar Mandapat", finish: 11 },
-      { name: "Jeremy Labata",  finish: 12 },
-      { name: "Sam",            finish: 12 },
+      { name: "John Var",            pts: 12.5, finish: 1  },
+      { name: "Ron Romero",          pts: 11,   finish: 2  },
+      { name: "Milmar Taylor",       pts: 11,   finish: 3  },
+      { name: "John Ezekiel",        pts: 10,   finish: 4  },
+      { name: "Alex Carrera",        pts: 7,    finish: 5  },
+      { name: "Ian Melendres",       pts: 6,    finish: 6  },
+      { name: "Ian Tan",             pts: 6,    finish: 7  },
+      { name: "Mykee Myk",           pts: 6,    finish: 8  },
+      { name: "Ismael",              pts: 5,    finish: 9  },
+      { name: "Juan Gonzaga",        pts: 5,    finish: 9  },
+      { name: "Martin Miranda",      pts: 5,    finish: 9  },
+      { name: "Diego Cerrudo",       pts: 4,    finish: 10 },
+      { name: "Cesar Mandapat",      pts: 2,    finish: 11 },
+      { name: "Jeremy Labata",       pts: 2,    finish: 12 },
+      { name: "Sam",                 pts: 2,    finish: 12 },
+      { name: "Gerard Romero",       pts: 1,    finish: 13 },
+      { name: "Paulo Reyes",         pts: 1,    finish: 13 },
+      { name: "Francisca Asuncion",  pts: 1,    finish: 13 },
+      { name: "Mark Salazar",        pts: 0,    finish: 13 },
     ]
   }
 ];
@@ -512,10 +527,7 @@ const EVENTS = [
 // ─────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────
-function getPoints(finish, eventPoints) {
-  if (finish < eventPoints.length) return eventPoints[finish];
-  return eventPoints[eventPoints.length - 1]; // last value = default for deep finishes
-}
+// pts are stored directly on each result — no calculation needed
  
 function getStatus(rank) {
   if (rank === 1) return { label: 'Champion', cls: 'badge-champ' };
@@ -539,10 +551,12 @@ function buildOverall() {
   EVENTS.forEach(ev => {
     ev.results.forEach(r => {
       if (!totals[r.name]) totals[r.name] = { name: r.name, pts: 0, eventCount: 0 };
-      totals[r.name].pts += getPoints(r.finish, ev.points);
+      totals[r.name].pts += r.pts;
       totals[r.name].eventCount++;
     });
   });
+  // Round to avoid floating point display issues (e.g. 22.500000001)
+  Object.values(totals).forEach(p => { p.pts = Math.round(p.pts * 10) / 10; });
   return Object.values(totals).sort((a, b) => b.pts - a.pts);
 }
  
@@ -609,7 +623,6 @@ function renderEventTab(evId) {
       </div>
       <div class="event-card-body">
         ${ev.results.map(r => {
-          const pts = getPoints(r.finish, ev.points);
           const badge = badgeMap[r.finish] ? `<span class="er-badge ${badgeMap[r.finish]}" style="flex-shrink:0">${ordinal(r.finish)}</span>` : '';
           return `
           <div class="event-result-row">
@@ -618,7 +631,7 @@ function renderEventTab(evId) {
               <div style="font-family:'Cinzel',serif; font-size:12px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.name}</div>
             </div>
             ${badge}
-            <div class="er-pts" style="flex-shrink:0; margin-left:6px;">+${pts}</div>
+            <div class="er-pts" style="flex-shrink:0; margin-left:6px;">+${r.pts}</div>
           </div>`;
         }).join('')}
       </div>
@@ -630,15 +643,21 @@ function renderEventTab(evId) {
 // ─────────────────────────────────────────────
 function renderScoringLegend() {
   const container = document.getElementById('scoring-legend');
-  container.innerHTML = EVENTS.map(ev => `
+  container.innerHTML = EVENTS.map(ev => {
+    // Collect unique finish → pts mappings for display
+    const seen = {};
+    ev.results.forEach(r => { if (!(r.finish in seen)) seen[r.finish] = r.pts; });
+    const entries = Object.entries(seen).sort((a,b) => a[0]-b[0]);
+    return `
     <div style="margin-bottom:14px;">
       <div style="font-family:'Cinzel',serif; font-size:10px; color:var(--gold); letter-spacing:0.1em; margin-bottom:6px;">${ev.name}</div>
       <div class="legend-grid">
-        ${ev.points.slice(1).map((pts, i) => `
-          <div class="legend-item"><span>${ordinal(i+1)}</span><strong>${pts} pts</strong></div>
+        ${entries.map(([fin, pts]) => `
+          <div class="legend-item"><span>${ordinal(Number(fin))}</span><strong>${pts} pts</strong></div>
         `).join('')}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
  
 // ─────────────────────────────────────────────
