@@ -404,10 +404,11 @@
 
 <div class="tab-bar" role="tablist">
   <div class="tab active" onclick="switchTab('overall')" role="tab">Overall</div>
-  <div class="tab" onclick="switchTab('bc1')" role="tab">Brewer's Cup 1</div>
-  <div class="tab" onclick="switchTab('bc2')" role="tab">Brewer's Cup 2</div>
-  <div class="tab" onclick="switchTab('bc3')" role="tab">Brewer's Cup 3</div>
-  <div class="tab" onclick="switchTab('bc4')" role="tab">Brewer's Cup 4</div>
+  <div class="tab" onclick="switchTab('bc1')" role="tab">BC 1</div>
+  <div class="tab" onclick="switchTab('bc2')" role="tab">BC 2</div>
+  <div class="tab" onclick="switchTab('bc3')" role="tab">BC 3</div>
+  <div class="tab" onclick="switchTab('bc4')" role="tab">BC 4</div>
+  <div class="tab" onclick="switchTab('bc5')" role="tab">BC 5</div>
 </div>
 
 <div id="tab-overall" class="tab-content active">
@@ -456,11 +457,17 @@
 </div>
 
 <div id="tab-bc4" class="tab-content">
-  <div class="section-title">Brewer's Cup 4 — Upcoming</div>
+  <div class="section-title">Brewer's Cup 4 Results</div>
+  <div class="event-results" id="bc4-results"></div>
+  <div class="updated">Event completed — 2026</div>
+</div>
+
+<div id="tab-bc5" class="tab-content">
+  <div class="section-title">Brewer's Cup 5 — Upcoming</div>
   <div style="padding: 30px 20px; text-align:center; color: var(--text-dim); font-family:'Cinzel',serif; font-size: 13px; letter-spacing:0.05em;">
     <div style="font-size: 32px; margin-bottom: 12px; opacity:0.4;">⏳</div>
     Results will appear here after the event.<br>
-    <span style="font-size: 11px; font-style:italic; opacity:0.6; margin-top: 8px; display:block;">Stay tuned, Planeswalker.</span>
+    <span style="font-size: 11px; font-style:italic; opacity:0.6; margin-top: 8px; display:block;">December 5, 2026 — Stay tuned, Planeswalker.</span>
   </div>
 </div>
 
@@ -532,7 +539,6 @@ const EVENTS = [
     id: 'bc3',
     name: "Brewer's Cup 3",
     date: "August 1, 2026",
-    // BC3 scores from updated spreadsheet. 0 = joined, earned 0 pts.
     results: [
       { name: "Milo",                pts: 17,   finish: 1  },
       { name: "Gab Chee Kee",        pts: 13.5, finish: 2  },
@@ -554,6 +560,31 @@ const EVENTS = [
       { name: "Bemas Cabida",        pts: 0,    finish: 16 },
       { name: "otchong",             pts: 0,    finish: 16 },
       { name: "Miklos Manlapas",     pts: 0,    finish: 16 },
+    ]
+  },
+  {
+    id: 'bc4',
+    name: "Brewer's Cup 4",
+    date: "2026",
+    // BC4 scores: 0 = joined, earned 0 pts. Finish order derived from points.
+    results: [
+      { name: "Gab Chee Kee",        pts: 15,   finish: 1  },
+      { name: "otchong",             pts: 10,   finish: 2  },
+      { name: "Alex Carrera",        pts: 9,    finish: 3  },
+      { name: "John Ezekiel",        pts: 7.5,  finish: 4  },
+      { name: "Ron Romero",          pts: 7,    finish: 5  },
+      { name: "Frederick Raj Umel",  pts: 7,    finish: 5  },
+      { name: "Fryman Cal",          pts: 5,    finish: 7  },
+      { name: "Milo",                pts: 5,    finish: 7  },
+      { name: "Luigi",               pts: 4.5,  finish: 9  },
+      { name: "Dan Cruz",            pts: 4,    finish: 10 },
+      { name: "Ian Tan",             pts: 4,    finish: 10 },
+      { name: "Ian Melendres",       pts: 3,    finish: 12 },
+      { name: "Milmar Taylor",       pts: 2,    finish: 13 },
+      { name: "Martin Miranda",      pts: 1,    finish: 14 },
+      { name: "Jeremy Labata",       pts: 0,    finish: 15 },
+      { name: "Miklos Manlapas",     pts: 0,    finish: 15 },
+      { name: "Paolo Reyes",         pts: 0,    finish: 15 },
     ]
   }
 ];
@@ -698,7 +729,7 @@ function renderScoringLegend() {
 // TAB SWITCHING
 // ─────────────────────────────────────────────
 function switchTab(id) {
-  const tabIds = ['overall','bc1','bc2','bc3','bc4'];
+  const tabIds = ['overall','bc1','bc2','bc3','bc4','bc5'];
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', tabIds[i] === id);
   });
